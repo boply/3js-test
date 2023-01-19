@@ -33,9 +33,13 @@ scene.add(pointLight, ambientLight)
 
 const lightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(200, 50);
-scene.add(lightHelper, gridHelper)
+scene.add(lightHelper)
+//scene.add(gridHelper)
 
 const controls = new OrbitControls(camera, renderer.domElement);
+controls.enablePan = false;
+controls.enableRotate = false;
+controls.enableZoom = false;
 
 function addStar() {
   const geometry = new THREE.SphereGeometry(0.25, 24, 24);
@@ -51,22 +55,24 @@ function addStar() {
 
 Array(200).fill().forEach(addStar)
 
-const SkyBox = new THREE.Color ( 0xF6EA92 )
-scene.background = SkyBox
+const SkyBox = new THREE.Color ( 0xF6EA92 );
+scene.background = SkyBox;
 
 function animate() {
   requestAnimationFrame( animate );
   renderer.render( scene, camera );
 
   torus.rotation.x += 0.01;
-  torus.rotation.y += 0.005;
+  torus.rotation.y += 0.01;
   torus.rotation.z += 0.01;
+
+  moon.rotation.x += 0.02;
+  moon.rotation.y += 0.02;
+  moon.rotation.z += 0.02;
 
   controls.update();
 
 }
-
-animate()
 
 // Avatar
 
@@ -89,17 +95,17 @@ const moon = new THREE.Mesh(
 );
 
 scene.add(moon);
-moon.position.set(15, -15, 15)
+moon.position.set(10, 10, 15)
 
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
-  moon.rotation.x +- 0.05
-  moon.rotation.y +- 0.1
-  moon.rotation.z +- 0.075
+  moon.rotation.x += 0.05;
+  moon.rotation.y += 0.05;
+  moon.rotation.z += 0.05;
 
-  camera.position.z = t * -0.1;
-  camera.position.x = t * -0.1
-  camera.position.y = t * -0.02
+  camera.position.z = t * -0.05;
+  camera.position.x = t * -0.05;
+  camera.position.y = t * -0.02;
 
   camera.position.x = Math.max(5, camera.position.x);
   camera.position.y = Math.max(5, camera.position.y);
@@ -107,3 +113,5 @@ function moveCamera() {
 }
 
 document.body.onscroll = moveCamera
+
+animate();
